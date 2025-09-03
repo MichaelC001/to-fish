@@ -162,7 +162,11 @@ function __to_update_bookmark_completions
 
   # Bookmarks
   for bm in (__to_ls | sort -r)
-    complete -c to -k -n '__fish_use_subcommand; or __fish_seen_subcommand_from rm mv resolve' -r -a (echo $bm | string escape) -d (__to_print $bm)
+    set -l description (__to_print $bm)
+    if test -z "$description"
+      set description "$bm"  # Fallback to bookmark name if description is empty
+    end
+    complete -c to -k -n '__fish_use_subcommand; or __fish_seen_subcommand_from rm mv resolve' -r -a (echo $bm | string escape) -d "$description"
   end
 end
 
